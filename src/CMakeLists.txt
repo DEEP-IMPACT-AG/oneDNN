@@ -201,14 +201,14 @@ else()
         set_ternary(ext_and_ver APPLE "${ver}${ext}" "${ext}${ver}")
         get_property(lib_location TARGET ${LIB_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY)
         if(lib_location)
-            set(compat_link "${lib_location}/libmkldnn${ext_and_ver}")
+            set(compat_link "${lib_location}/libmkldnn${CMAKE_DEBUG_POSTFIX}${ext_and_ver}")
         else()
-            set(compat_link "${CMAKE_CURRENT_BINARY_DIR}/libmkldnn${ext_and_ver}")
+            set(compat_link "${CMAKE_CURRENT_BINARY_DIR}/libmkldnn${CMAKE_DEBUG_POSTFIX}${ext_and_ver}")
         endif()
         add_custom_command(OUTPUT ${compat_link}
             # to make the next command work fine
             COMMAND ${CMAKE_COMMAND} -E remove -f ${compat_link}
-            COMMAND ${CMAKE_COMMAND} -E create_symlink libdnnl${ext_and_ver} ${compat_link}
+            COMMAND ${CMAKE_COMMAND} -E create_symlink libdnnl${CMAKE_DEBUG_POSTFIX}${ext_and_ver} ${compat_link}
             DEPENDS ${LIB_NAME})
         add_custom_target(compat_libs${ver} ALL DEPENDS ${compat_link})
         install(FILES ${compat_link} DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
